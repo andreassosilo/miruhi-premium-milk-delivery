@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Find Order</title>
+  <!-- SEO: Add meta theme-color -->
+  <meta name="theme-color" content="#006EA8" />
+  <!--Google Fonts: Nunito-->
+  <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet" />
+  <!--CSS-->
+  <link href="/public/assets/app.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <div class="container">
+    <div id="home" class="flex-center flex-column">
+      <h2>Find Order</h2>
+      <form action="" method="POST">
+        <label for="orderId">Enter Order ID:</label>
+        <input type="number" name="id" id="order_id">
+      </form>
+      <div>
+        <h5>Order Information</h5>
+        <% const {id, name, phone, email, address} = order.dataValues %>
+        <p>Name:<%= name %></p>
+        <p>Phone:<%= phone %></p>
+        <p>E-mail:<%= email %></p>
+        <p>Address:<%= address %></p>
+        <p>Order ID:<%= id %></p>
+      </div>
+      <a class="btn" href="/orders/update/<%= id %>">Update Order</a>
+      <a class="btn" href="/orders/delete/<%= id %>">Delete Order</a>
+      <a class="btn" href="/">Return Home</a>
+    </div>
+  </div>
+</body>
+<a class="btn" href="#">Update Order</a>
+<a class="btn" href="#">Delete Order</a>
+<a class="btn" href="/">Return Home</a>
+</div>
+</div>
+</body>
+
+</html>

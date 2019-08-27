@@ -1,0 +1,193 @@
+Sequelize, Express.js & PostgreSQL for Miruhi
+=============================================
+
+// Installation dependencies
+1. ▶ npm init -> create package.json for dependencies
+2. ▶ touch .gitignore -> add .DS_Store, node_modules and config
+3. ▶ npm install --save sequelize pg -> install sequelize & postgreSQL connector
+4. ▶ npm install --save sequelize-cli -> install sequelize-cli
+5. ▶ sequelize init -> initialize sequelize & create folders (config, models, migrations, seeders)
+6. ▶ mkdir views controllers routes public -> Add MVC folders (views, controllers), routes, public
+7. ▶ npm install express --save -> install Express.js
+8. ▶ npm install -g nodemon -> (optional) node monitor, for the 1st time only
+9. ▶ npm install ejs -> install Embedded JavaScript
+
+// Setting ORM Sequelize.js
+1. Type sequelize to see help command
+2. Go to config.json in config folder -> delete "test" & "production" object + "operatorAliases" (deprecated)
+3. Change development configuration: 
+{
+  "development": {
+    "username": "postgres",
+    "password": "secret",
+    "database": "schoolDB",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}
+4. ▶ sequelize db:create -> create database specified by configuration
+5. Open DBeaver and refresh the database -> check if the created database is there or not
+6. ▶ sequelize model:generate --name Stock --attributes stock_name:string,quantity:integer,price:double -> generate a model for Stocks table
+7. ▶ sequelize model:generate --name Order --attributes name:string,phone:string,email:string,address:string -> generate a model for Orders table
+8. ▶ sequelize model:generate --name Purchase --attributes order_id:string,stock_id:string,quantity:integer,total_price:double -> generate a model for Purchases table
+9. ▶ sequelize db:migrate -> run pending migrations + check DBeaver if the table is created or not
+10. Change the model from const into class with extends:
+	const Model = sequelize.Sequelize.Model
+	class Teacher extends Model { }
+	Teacher.init({
+	first_name: DataTypes.STRING,
+	last_name: DataTypes.STRING,
+	email: DataTypes.STRING
+	}, { sequelize })
+11. Add validation also! -> see Sequelize Model definition -> validation
+12. ▶ sequelize db:migrate -> run pending migrations + check if the new field is added or not
+13. ▶ sequelize seed:generate --name stockSeeder -> generate a new seed file
+14. Fill the seed with dummy data:
+	const dummyData = [
+	  {
+			stock_name: 'Plain 1L',
+			quantity: 20,
+			price: 1
+    }
+	]
+	up: (queryInterface, Sequelize) => {
+	return queryInterface.bulkInsert('Stocks', initialData, {})
+	},
+	down: (queryInterface, Sequelize) => {
+	return queryInterface.bulkDelete('Stocks', null, {})
+	}
+15. ▶ sequelize db:seed:all -> run every seeder and fill the table in database
+
+// Set controller folder
+1. Create index.js, StockController.js, OrderController.js, PurchaseController.js
+2. In each controller.js -> add class StockController, module.exports = StockController and const { Stock } = require('../models')
+3. In index.js of the controllers folder -> add each controller and module.exports :
+	const StudentController = require('./studentController')
+	const SubjectController = require('./subjectController')
+	const TeacherController = require('./teacherController')
+
+	module.exports = {
+	  StudentController,
+	  SubjectController,
+	  TeacherController
+	}
+
+// Create Express.js application
+1. ▶ touch app.js -> create app.js
+2. Fill this configuration in app.js:
+	// Library
+	const express = require('express')
+	const router = require('./routes')
+	const app = express()
+	const PORT = process.env.PORT || 3000
+
+	// EJS configuration
+	app.set('view engine', 'ejs')
+
+	// Basic routing (GET & POST)
+	app.use(express.urlencoded({ extended: false }))
+	app.use(express.json())
+
+	// Load router module on the app.js
+	app.use('/', routes)
+
+	// Start the server
+	app.listen(PORT)
+	console.log(`Magic happens on port ${PORT}!`)
+3. Express basic routing -> in folder routes -> create index.js, studentRouter.js, teacherRouter.js, subjectRouter.js
+4. Fill studentRouter.js (and the rest router) with:
+	const express = require('express')
+	const router = express.Router()
+	const { StudentController } = require('../controllers')
+
+	router.get('/', StudentController.showAll)
+	router.get('/add', StudentController.showForm)
+	router.post('/add', StudentController.create)
+	router.get('/edit/:id', StudentController.edit)
+	router.post('/edit/:id', StudentController.update)
+	router.get('/delete/:id', StudentController.remove)
+	... and so on
+
+	module.exports = router
+5. Fill index.js (routes folder) with:
+	const router = require('express').Router()
+	const student = require('./studentRouter')
+	const teacher = require('./teacherRouter')
+	const subject = require('./subjectRouter')
+
+	router.use('/students', student)
+	router.use('/teachers', teacher)
+	router.use('/subjects', subject)
+
+	// Profile page
+	router.get('/', (req, res) => {
+	  res.render('index')
+	})
+
+	module.exports = router
+
+// Create CRUD in the controller
+1. Create static method in the studentController.js:
+	const { Student } = require('../models')
+
+	class StudentController {
+	  static showAll (req, res) {
+	    Student.findAll({
+	      order: [['id', 'ASC']]
+	    })
+	      .then((students) => {
+		res.render('students/allStudents', { students, success: req.query.success })
+	      }).catch((err) => {
+		res.render('errors', { err })
+	      })
+	  }
+
+	  static showForm (req, res) {
+	    res.render('students/formStudents')
+	  }
+
+	  static create (req, res) {
+	    console.log(req.body)
+	    Student.create(req.body)
+	      .then((result) => {
+		res.redirect('/students?success=add')
+	      }).catch((err) => {
+		res.render('errors', { err })
+	      })
+	  }
+
+	  static edit (req, res) {
+	    Student.findByPk(req.params.id)
+	      .then((student) => {
+		res.render('students/editStudents', { student })
+	      }).catch((err) => {
+		res.render('errors', { err })
+	      })
+	  }
+
+	  static update (req, res) {
+	    Student.update(req.body, { where: { id: req.params.id } })
+	      .then((result) => {
+		res.redirect('/students?success=edit')
+	      }).catch((err) => {
+		res.render('errors', { err })
+	      })
+	  }
+
+	  static remove (req, res) {
+	    Student.destroy({ where: { id: req.params.id } })
+	      .then((result) => {
+		res.redirect('/students?success=delete')
+	      }).catch((err) => {
+		res.render('errors', { err })
+	      })
+	  }
+	}
+
+	module.exports = StudentController
+
+// Create EJS file in the views folder
+1. Create index.ejs file in the views folder, and fill with HTML5 code
+2. Add Bootstrap 4 CDN to the <head> for the CSS
+3. Add <footer></footer>
+4. Create orders & stocks folder in the views folder -> add files ...

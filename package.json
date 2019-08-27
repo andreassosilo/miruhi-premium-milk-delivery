@@ -1,0 +1,25 @@
+{
+  "name": "miruhi",
+  "version": "1.0.0",
+  "description": "E-Commerce - Premium Milk At Your Door",
+  "main": "app.js",
+  "scripts": {
+    "test": "miruhi"
+  },
+  "keywords": [
+    "e-commerce",
+    "miruhi",
+    "premium",
+    "milk",
+    "delivery"
+  ],
+  "author": "Andreas Sosilo",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^2.6.2",
+    "express": "^4.17.1",
+    "pg": "^7.12.1",
+    "sequelize": "^5.16.0",
+    "sequelize-cli": "^5.5.0"
+  }
+}
