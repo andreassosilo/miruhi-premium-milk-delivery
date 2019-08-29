@@ -4,7 +4,7 @@ Develop a dynamic web app for final project phase 1 - batch 34 (Humble Fox) at H
 
 **Miruhi** is an e-commerce app, where registered user can order premium milk with 3 different flavours (Plain, Chocolate, Strawberry).
 
-:milk_glass: [**Buy Miruhi Premium Milk!**] **TBA (will be deployed in Heroku)**
+:cow2: [**Buy Miruhi Premium Milk!**] **TBA (will be deployed in Heroku)**
 
 ### Build using:
 - HTML5
