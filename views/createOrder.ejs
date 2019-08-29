@@ -10,72 +10,59 @@
   <meta name="theme-color" content="#006EA8" />
   <!--Google Fonts: Nunito-->
   <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet" />
+  <!-- Bootstrap CSS -->
+  <%- include('./partials/bootstrap')%>
   <!--CSS-->
   <link href="/public/assets/app.css" rel="stylesheet" type="text/css" />
 </head>
 
-<body>
+<body style="background-color: #006ea8">
   <div class="container">
     <div id="home" class="flex-center flex-column">
       <h2>Create Order</h2>
-      <div class="plain">
-        <div>
-          <img src="/public/assets/plainMiruhi.png" alt="Plain Milk" />
-        </div>
-        <div>Plain 1L</div>
-        <div>Stock left: 15</div>
-        <div>
-          <form action="" method="POST">
+      <form action="" method="POST">
+        <input type="hidden" value="1" name="UserId">
+        <div class="plain">
+          <div>
+            <img src="/public/assets/plainMiruhi.png" alt="Plain Milk" />
+          </div>
+          <div>Plain 1L</div>
+          <div>Stock left: 15</div>
+          <div>
             <p>Qty</p>
-            <input type="number" step="1" id="quantity" name="quantity" />
-          </form>
+            <input type="number" step="1" id="quantity" name="Plain 1L" />
+          </div>
         </div>
-      </div>
-      <div class="chocolate">
-        <div>
-          <img src="/public/assets/chocolateMiruhi.png" alt="Chocolate Milk" />
-        </div>
-        <div>Plain 1L</div>
-        <div>Stock left: 15</div>
-        <div>
-          <form action="" method="POST">
+        <div class="chocolate">
+          <div>
+            <img src="/public/assets/chocolateMiruhi.png" alt="Chocolate Milk" />
+          </div>
+          <div>Chocolate 1L</div>
+          <div>Stock left: 15</div>
+          <div>
             <p>Qty</p>
-            <input type="number" step="1" id="quantity" name="quantity" />
-          </form>
+            <input type="number" step="1" id="quantity" name="Chocolate 1L" />
+          </div>
         </div>
-      </div>
-      <div class="strawberry">
-        <div>
-          <img src="/public/assets/strawberryMiruhi.png" alt="Strawberry Milk" />
-        </div>
-        <div>Plain 1L</div>
-        <div>Stock left: 15</div>
-        <div>
-          <form action="" method="POST">
+        <div class="strawberry">
+          <div>
+            <img src="/public/assets/strawberryMiruhi.png" alt="Strawberry Milk" />
+          </div>
+          <div>Strawberry 1L</div>
+          <div>Stock left: 15</div>
+          <div>
             <p>Qty</p>
-            <input type="number" step="1" id="quantity" name="quantity" />
-          </form>
-        </div>
-      </div>
+            <input type="number" step="1" id="quantity" name="Strawberry 1L" />
+          </div>
+          <div>
+            <button type="submit" class="btn btn-primary">Submit Order</button>
+          </div>
+      </form>
       <div>
-        <form method="POST">
-          <label for="name">Name:</label>
-          <input type="text" id="name" name="name" />
-          <br />
-          <label for="phone">Phone:</label>
-          <input type="text" id="phone" name="phone" />
-          <br />
-          <label for="email">E-mail:</label>
-          <input type="text" id="email" name="email" />
-          <br />
-          <label for="address">Delivery address:</label>
-          <input type="text" id="address" name="address" />
-          <button type="submit" class="btn">Submit Order</button>
-        </form>
+        <a class="btn" href="/users/action">Cancel</a>
       </div>
-
-      <a class="btn" href="/">Cancel</a>
     </div>
+  </div>
   </div>
 </body>
 

@@ -1,11 +1,12 @@
 'use strict'
 
-const router = require('express').Router()
+const express = require('express')
+const router = express.Router()
 const order = require('./orderRouter')
-// const stock = require('./stockRouter')
+const user = require('./userRouter')
 
 router.use('/orders', order)
-// router.use('/stocks', stock)
+router.use('/users', user)
 
 // Home page
 router.get('/', (req, res) => {

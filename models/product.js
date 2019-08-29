@@ -1,9 +1,9 @@
 'use strict'
 module.exports = (sequelize, DataTypes) => {
-  const Model = sequelize.Sequel.Model
+  const Model = sequelize.Sequelize.Model
 
   class Product extends Model {
-    static associate (models) {
+    static associate(models) {
       Product.hasMany(models.OrderProduct)
     }
   }

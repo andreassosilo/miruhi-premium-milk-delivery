@@ -1,9 +1,12 @@
 'use strict'
+
+const crypto = require('crypto')
+
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.Sequelize.Model
 
   class User extends Model {
-    static associate (models) {
+    static associate(models) {
       User.hasMany(models.Order)
     }
   }
@@ -40,5 +43,22 @@ module.exports = (sequelize, DataTypes) => {
     address: DataTypes.STRING
   }, { sequelize })
 
+  User.addHook('beforeCreate', (user, options) => {
+    return User.findOne({
+      where: {
+        email: user.email
+      }
+    })
+      .then((result) => {
+        if (result) throw new Error('E-mail already exist!')
+
+        user['password'] = `hacktiv8${user.name}`
+        const salt = 'abcdefg'
+        user['salt'] = salt
+        user['password'] = crypto.createHmac('sha256', salt)
+          .update(user['password'])
+          .digest('hex')
+      })
+  })
   return User
 }
