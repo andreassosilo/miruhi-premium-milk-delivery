@@ -1,4 +1,5 @@
-# Miruhi - Premium Milk Delivery with Node.js + Sequelize + Express.js
+# Miruhi - Premium Milk Delivery 
+# with Node.js + Sequelize + Express.js
 
 Develop a dynamic web app for final project phase 1 - batch 34 (Humble Fox) at Hacktiv8 Coding Bootcamp
 
