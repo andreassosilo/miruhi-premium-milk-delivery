@@ -14,9 +14,9 @@ class OrderController {
   static create(req, res) {
     Product.findAll({
       where: {
-        [Op.or]: {
-          id: req.body.
-        }
+        // [Op.or]: {
+        //   id: req.body.
+        // }
       }
     })
 
