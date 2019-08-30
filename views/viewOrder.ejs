@@ -25,31 +25,41 @@
   <!-- Bootstrap CSS -->
   <%- include('./partials/bootstrap')%>
   <!--CSS-->
-  <link href="/public/assets/app.css" rel="stylesheet" type="text/css" />
+
 </head>
 
 <body style="background-color: #006ea8">
   <div class="container">
     <div id="home" class="flex-center flex-column">
-      <h2>View Order History</h2>
+      <h2 style="color: white">View Order History</h2>
       <a class="btn" href="/users/dashboard">Go Back</a>
       <br>
-      <% orders.forEach(order => {%>
-      <div class="card bg-light">
-        <div class="card-header text-white bg-dark">
-          Order No.: <%= order.id%>
+
+      <div class="card-columns">
+        <% orders.forEach(order => {%>
+        <div class="card border-dark mb-3">
+          <div class="card-header text-white bg-dark">
+            Order No.: <%= order.id%>
+          </div>
+          <ul class="list-group list-group-flush">
+            <% order.dataValues.OrderProducts.forEach((orderProduct, i) => {%>
+            <li class="list-group-item text-dark">
+              <strong> OrderProductId: <%= orderProduct.OrderId %></strong>
+              <br>
+              <%= orderProduct.quantity %>x <%= order.dataValues.Products[i].name %>
+              <br>
+              Sub-total: <%= addCurrency(order.dataValues.Products[i].price * orderProduct.quantity) %>
+              <div>
+                <button type="button" class="btn btn-success btn-sm">Edit</button>
+                <button type="button" class="btn btn-danger btn-sm">Delete</button>
+              </div>
+
+            </li>
+            <% }) %>
+          </ul>
         </div>
-        <ul class="list-group list-group-flush">
-          <% order.dataValues.OrderProducts.forEach((orderProduct, i) => {%>
-          <li class="list-group-item text-dark">
-            OrderProductId: <%= orderProduct.OrderId %>
-            <br>
-            <%= orderProduct.quantity %>x <%= order.dataValues.Products[i].name %>
-          </li>
-          <% }) %>
-        </ul>
+        <% }) %>
       </div>
-      <% }) %>
     </div>
   </div>
   <!--Bootstrap 4: JQuery, Popper, JS-->
