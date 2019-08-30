@@ -1,6 +1,7 @@
 'use strict'
 
 const { User } = require('../models')
+const encryption = require('../helpers/encryption')
 
 class UserController {
   static showLoginForm(req, res) {
@@ -9,7 +10,22 @@ class UserController {
   }
 
   static login(req, res) {
-    res.redirect('/users/action')
+    User.findOne({
+      where: {
+        email: req.body.email
+      }
+    })
+      .then(user => {
+        if (encryption.compare(req.body.password, user.password)) {
+          req.session.email = user.email
+          res.redirect(`/users/dashboard`)
+        } else {
+          res.redirect('/login')
+        }
+      })
+      .catch((err) => {
+        res.send(err)
+      })
   }
 
   static showRegisterForm(req, res) {
@@ -34,8 +50,18 @@ class UserController {
 
   }
 
-  static action(req, res) {
-    res.render('action')
+  static dashboard(req, res) {
+    res.render('dashboard')
+  }
+
+  static logout(req, res) {
+    req.session.destroy(function (err) {
+      if (err) {
+        res.send(err)
+      } else {
+        res.redirect('/')
+      }
+    })
   }
 }
 

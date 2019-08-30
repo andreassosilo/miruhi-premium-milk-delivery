@@ -20,49 +20,33 @@
   <div class="container">
     <div id="home" class="flex-center flex-column">
       <h2>Create Order</h2>
-      <form action="" method="POST">
-        <input type="hidden" value="1" name="UserId">
-        <div class="plain">
+      <form method="POST">
+        <input type="hidden" value="<%= UserId %>" name="UserId">
+        <% products.forEach(product => {%>
+        <% const {id, name, price, stock} = product.dataValues %>
+        <div class="<%= name %>">
           <div>
+            <% if (id === 1) { %>
             <img src="/public/assets/plainMiruhi.png" alt="Plain Milk" />
-          </div>
-          <div>Plain 1L</div>
-          <div>Stock left: 15</div>
-          <div>
-            <p>Qty</p>
-            <input type="number" step="1" id="quantity" name="1" />
-          </div>
-        </div>
-        <div class="chocolate">
-          <div>
+            <% } else if (id === 2) { %>
             <img src="/public/assets/chocolateMiruhi.png" alt="Chocolate Milk" />
+            <% } else if (id === 3) { %>
+            <img src="/public/assets/strawberryMiruhi.png" alt="Strawberry Milk" />
+            <% } %>
           </div>
-          <div>Chocolate 1L</div>
-          <div>Stock left: 15</div>
-          <div>
-            <p>Qty</p>
-            <input type="number" step="1" id="quantity" name="Chocolate 1L" />
+          <div><%= name %></div>
+          <div>Price: <%= addCurrency(price) %></div>
+          <div>Stock left: <%= stock %></div>
+          <div class="form-group">
+            <p><strong>Quantity</strong></p>
+            <input type="number" placeholder="0" min="0" max="<%= stock %>" step="1" id="quantity" name="<%= id %>" />
           </div>
         </div>
-        <div class="strawberry">
-          <div>
-            <img src="/public/assets/strawberryMiruhi.png" alt="Strawberry Milk" />
-          </div>
-          <div>Strawberry 1L</div>
-          <div>Stock left: 15</div>
-          <div>
-            <p>Qty</p>
-            <input type="number" step="1" id="quantity" name="1" />
-          </div>
-          <div>
-            <button type="submit" class="btn btn-primary">Submit Order</button>
-          </div>
+        <% }) %>
+        <button type="submit" class="btn btn-primary">Submit Order</button>
       </form>
-      <div>
-        <a class="btn" href="/users/action">Cancel</a>
-      </div>
+      <a class="btn" href="/users/dashboard">Cancel</a>
     </div>
-  </div>
   </div>
 </body>
 

@@ -1,6 +1,6 @@
 'use strict'
 
-const crypto = require('crypto')
+const encrypt = require('../helpers/encryption')
 
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.Sequelize.Model
@@ -14,18 +14,18 @@ module.exports = (sequelize, DataTypes) => {
   User.init({
     name: {
       type: DataTypes.STRING,
-      allowNull: false,
       validate: {
-        notNull: {
-          msg: 'Please fill the name!'
+        notEmpty: {
+          args: true,
+          msg: 'Please fill with your full name!'
         }
       }
     },
     phone: {
       type: DataTypes.STRING,
-      allowNull: false,
       validate: {
-        notNull: {
+        notEmpty: {
+          args: true,
           msg: 'Please fill with your phone number!'
         }
       }
@@ -33,14 +33,34 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Please fill the e-mail!'
+        },
         isEmail: {
           args: true,
           msg: 'Please fill with the correct email format!'
         }
       }
     },
-    password: DataTypes.STRING,
-    address: DataTypes.STRING
+    password: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Please fill the password!'
+        }
+      }
+    },
+    address: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Please fill the delivery address!'
+        }
+      }
+    }
   }, { sequelize })
 
   User.addHook('beforeCreate', (user, options) => {
@@ -51,13 +71,8 @@ module.exports = (sequelize, DataTypes) => {
     })
       .then((result) => {
         if (result) throw new Error('E-mail already exist!')
-
-        user['password'] = `hacktiv8${user.name}`
-        const salt = 'abcdefg'
-        user['salt'] = salt
-        user['password'] = crypto.createHmac('sha256', salt)
-          .update(user['password'])
-          .digest('hex')
+        // Using bcrypt
+        user['password'] = encrypt.hash(user.password)
       })
   })
   return User

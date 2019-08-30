@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Miruhi | Premium Milk Delivery</title>
+  <title>View Order</title>
   <meta name="keywords"
     content="HTML, CSS, JavaScript, E-Commerce, Node.js, Sequelize, Express.js, Web, Apps, Hacktiv8">
   <!-- SEO: Add description here -->
@@ -14,7 +14,7 @@
   <meta name="title" property="og:title" content="Miruhi - Premium Milk Delivery">
   <meta property="og:type" content="Website">
   <meta name="image" property="og:image"
-    content="https://raw.githubusercontent.com/andreassosilo/chickuiz/master/assets/metaDataChickuiz.png">
+    content="https://raw.githubusercontent.com/andreassosilo/miruhi-premium-milk-delivery/master/public/assets/miruhiHome.png">
   <meta name="description" property="og:description"
     content="An e-commerce web app for final project phase 1 - batch 34 (Humble Fox) at Hacktiv8 Coding Bootcamp">
   <meta property="og:url" content="https://github.com/andreassosilo/miruhi/blob/master/README.md" />
@@ -22,21 +22,38 @@
   <meta name="theme-color" content="#006EA8" />
   <!--Google Fonts: Nunito-->
   <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet" />
+  <!-- Bootstrap CSS -->
+  <%- include('./partials/bootstrap')%>
   <!--CSS-->
   <link href="/public/assets/app.css" rel="stylesheet" type="text/css" />
-
 </head>
 
-<body>
+<body style="background-color: #006ea8">
   <div class="container">
     <div id="home" class="flex-center flex-column">
-      <img src="/public/assets/miruhiHome.png" alt="Miruhi Logo" />
-      <h1>miruhi</h1>
-      <h4>Premium Milk at Your Door</h4>
-      <a class="btn" href="/orders/create">Create Order</a>
-      <a class="btn" href="/orders/find">Find Order</a>
+      <h2>View Order History</h2>
+      <a class="btn" href="/users/dashboard">Go Back</a>
+      <br>
+      <% orders.forEach(order => {%>
+      <div class="card bg-light">
+        <div class="card-header text-white bg-dark">
+          Order No.: <%= order.id%>
+        </div>
+        <ul class="list-group list-group-flush">
+          <% order.dataValues.OrderProducts.forEach((orderProduct, i) => {%>
+          <li class="list-group-item text-dark">
+            OrderProductId: <%= orderProduct.OrderId %>
+            <br>
+            <%= orderProduct.quantity %>x <%= order.dataValues.Products[i].name %>
+          </li>
+          <% }) %>
+        </ul>
+      </div>
+      <% }) %>
     </div>
   </div>
+  <!--Bootstrap 4: JQuery, Popper, JS-->
+  <%- include('./partials/bootstrapComponents')%>
 </body>
 
 </html>

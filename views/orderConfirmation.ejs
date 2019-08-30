@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>User Action</title>
+  <title>Dashboard</title>
   <meta name="keywords"
     content="HTML, CSS, JavaScript, E-Commerce, Node.js, Sequelize, Express.js, Web, Apps, Hacktiv8">
   <!-- SEO: Add description here -->
@@ -34,20 +34,24 @@
       <img src="/public/assets/miruhiHome.png" alt="Miruhi Logo" />
       <h1>miruhi</h1>
       <h4>Premium Milk at Your Door</h4>
-      <a class="btn" href="/orders/create">Create</a>
-      <a class="btn" href="/orders/update">Update</a>
-      <a class="btn" href="/users/logout">Logout</a>
+      <div class="card bg-light">
+        <h5 class="card-header text-white bg-dark">Order Confirmation</h5>
+        <div class="card-body">
+          <h5 class="card-title text-dark">Hello, <%= name %>!</h5>
+          <p class="card-text text-dark">Thank you for your Miruhi order.</p>
+          <p class="card-text text-dark">Order No.: <%= products[0].OrderId %></p>
+          <p class="card-text text-dark">Product information:</p>
+          <% products.forEach(product => {%>
+          <p class="card-text text-dark"><%= product.quantity %>x <%= product.Product.name %></p>
+          <% }) %>
+        </div>
+      </div>
+      <br>
+      <a class="btn" href="/users/dashboard">Go Back</a>
     </div>
   </div>
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-  </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
-  </script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-  </script>
+  <!--Bootstrap 4: JQuery, Popper, JS-->
+  <%- include('./partials/bootstrapComponents')%>
 </body>
 
 </html>

@@ -1,75 +1,77 @@
 'use strict'
 
-const { Order, Product, OrderProduct } = require('../models')
+const { User, Order, Product, OrderProduct } = require('../models')
 
 class OrderController {
-  static showOrderPage(req, res) {
-  }
-
-  // Waktu reate Order -> chaining check stock & update si stock (pakai Hook: beforeUpdate), Product create Order, create OrderProduct, 
+  // Waktu create Order -> chaining check stock & update si stock (pakai Hook: beforeUpdate), Product create Order, create OrderProduct, 
   static showOrderForm(req, res) {
-    res.render('createOrder')
+    const promises = [User.findOne({
+      where: {
+        email: req.session.email
+      }
+    }), Product.findAll()]
+    Promise.all(promises)
+      .then((result) => {
+        // res.send(result)
+        res.render('createOrder', { UserId: result[0].id, products: result[1] })
+      }).catch((err) => {
+        res.send(err)
+      })
   }
 
   static create(req, res) {
-    Product.findAll({
-      where: {
-        // [Op.or]: {
-        //   id: req.body.
-        // }
-      }
-    })
-
-    // Create Order based on UserId
+    // res.send(req.body)
     let OrderId = null
     Order.create({ UserId: req.body.UserId })
+      .then((order) => {
+        const orderProductData = []
+        OrderId = order.id
+        for (let key in req.body) {
+          if (key !== 'UserId') {
+            if (Number(req.body[key]) > 0 || req.body[key] !== '') {
+              const data = {
+                OrderId,
+                ProductId: Number(key),
+                quantity: req.body[key]
+              }
+              orderProductData.push(data)
+            }
+          }
+        }
+        return OrderProduct.bulkCreate(orderProductData)
+      })
+      .then((orderProducts) => {
+        // res.send(orderProducts)
+        const promises = [User.findByPk(req.body.UserId), OrderProduct.findAll({
+          where: {
+            OrderId
+          },
+          include: [{ model: Product }],
+          order: [['id', 'ASC']]
+        })]
+        return Promise.all(promises)
+      })
       .then((result) => {
-        OrderId = result.id
-        // res.send(result)
-        // Create OrderProduct -> plain, choco, straw
-        if (req.body.plainQty > 0) {
-          const data = {
-            OrderId: OrderId,
-            ProductId: 1,
-            quantity: req.body.plainQty
-          }
-          return OrderProduct.create(data)
-        }
-      })
-      .then(() => {
-        if (req.body.chocolateQty > 0) {
-          const data = {
-            OrderId: OrderId,
-            ProductId: 2,
-            quantity: req.body.chocolateQty
-          }
-          return OrderProduct.create(data)
-        }
-      })
-      .then(() => {
-        if (req.body.strawberryQty > 0) {
-          const data = {
-            OrderId: OrderId,
-            ProductId: 3,
-            quantity: req.body.straberryQty
-          }
-          return OrderProduct.create(data)
-        }
+        //res.send(result)
+        res.render('orderConfirmation', { name: result[0].name, products: result[1] })
       })
       .catch((err) => {
-        // console.log(err)
-        res.render('errors', { err })
+        res.send(err)
       })
   }
 
   static showOrderInformation(req, res) {
     // console.log(req.params.id)
-    Order.findByPk(req.params.id)
-      .then((order) => {
-        // console.log(order)
-        res.render('orderInformation', { order })
+    User.findOne({ where: { email: req.session.email } })
+      .then((user) => {
+        // console.log(user)
+        return Order.findAll({ where: { UserId: user.id }, include: [OrderProduct, Product] })
+      }).then((orders) => {
+        console.log(orders)
+        //res.send(orders)
+        res.render('viewOrder', { orders })
       }).catch((err) => {
-        res.render('errors', { err })
+        res.send(err)
       })
   }
 

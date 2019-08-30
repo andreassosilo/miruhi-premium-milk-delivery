@@ -4,7 +4,8 @@
   "description": "E-Commerce - Premium Milk At Your Door",
   "main": "app.js",
   "scripts": {
-    "test": "miruhi"
+    "test": "miruhi",
+    "start": "node app.js"
   },
   "keywords": [
     "e-commerce",
@@ -16,9 +17,11 @@
   "author": "Andreas Sosilo",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^3.0.6",
+    "bcryptjs": "^2.4.3",
     "ejs": "^2.6.2",
     "express": "^4.17.1",
+    "express-session": "^1.16.2",
+    "nodemailer": "^6.3.0",
     "pg": "^7.12.1",
     "sequelize": "^5.16.0",
     "sequelize-cli": "^5.5.0"

@@ -3,10 +3,12 @@
 const express = require('express')
 const router = express.Router()
 const { UserController } = require('../controllers')
+const isLogin = require('../middlewares/isLogin')
 
-router.get('/login', UserController.showLoginForm)
-router.post('/login', UserController.login)
-router.get('/register', UserController.showRegisterForm)
-router.post('/register', UserController.register)
-router.get('/action', UserController.action)
+// Router logout
+router.get('/logout', UserController.logout)
+
+// Router dashboard
+router.get('/dashboard', isLogin, UserController.dashboard)
+
 module.exports = router
