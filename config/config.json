@@ -7,10 +7,10 @@
     "dialect": "postgres"
   },
   "production": {
-    "username": "postgres",
-    "password": "secret",
-    "database": "miruhiDB",
-    "host": "127.0.0.1",
+    "username": "vsoagnsfraumwd",
+    "password": "1ea9a804a71f62fdce256e1dd2b01ba4586da12a3a25a877a7579abfc308ae02",
+    "database": "dms7manoeatsp",
+    "host": "ec2-107-22-211-248.compute-1.amazonaws.com",
     "dialect": "postgres"
   }
 }
