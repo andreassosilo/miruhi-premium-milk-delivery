@@ -43,7 +43,7 @@ class UserController {
     }
     User.create(user)
       .then((result) => {
-        res.send(result)
+        res.render('index')
       }).catch((err) => {
         res.render('register', { error: err.message, user })
       });
